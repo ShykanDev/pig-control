@@ -52,8 +52,10 @@ const toggleSidebar = () => sidebarClosed.value = !sidebarClosed.value;
 const pushToDailySales = () => {
   // verify if the cart is not empty
   if (tempCart.length > 0) {  
-    dailySalesStore.pushToDailySales({...tempCart, itemsTotal: itemsTempCart.getGrandTotal} as any);
+    dailySalesStore.pushToDailySales([...tempCart] as any);
+    dailySalesStore.pushToDailySalesDate(new Date().toLocaleString());
     dailySalesStore.pushDailySale(itemsTempCart.getGrandTotal);
+    console.log('dailySalesStore:', dailySalesStore.getDailySalesTotals);
     itemsTempCart.clearTempCart();
     router.push({ name: 'sales' });
   } else{

@@ -20,14 +20,15 @@ export const useItemHistorySales = defineStore('itemHistorySales', ({
         }
     },
     actions: {
-        pushSaleToHistory(item: any){
-            this.totalHistory.push(item);
+        pushSaleToHistory(itemArr: any[]){ 
+            // Asegúrate de que itemArr es un array antes de mapear
+            this.totalHistory.unshift(itemArr);
         },
         pushTotalsToHistory(item: any){
-            this.totalHistoryTotals.push(item);
+            this.totalHistoryTotals.unshift(item);
         },
         pushDateToHistory(item: any){
-            this.historyDate.push(item);
+            this.historyDate.unshift(item);
         },
         clearHistory(){
             this.totalHistory = [];
