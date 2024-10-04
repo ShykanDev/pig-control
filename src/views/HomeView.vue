@@ -5,7 +5,7 @@
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-20"></div>
           <article :class="{'translate-x-0': !sidebarClosed, '-translate-x-[92%]': sidebarClosed }" class="transition-transform ease-out duration-500 fixed top-0 bottom-0 left-0 bg-sky-50 w-[25%] py-12 flex flex-col items-center gap-3 overflow-auto">
             <p class="text-2xl font-bold">Venta</p>
-            <p v-for="item in cartItems" :key="item.itemName" class="px-2 mx-10 font-bold bg-white rounded-md shadow-md text-sky-800">{{ item.itemAmount }} {{ item.itemName }} ${{ item.itemSubtotal }}</p>
+            <p v-for="(item, index) in cartItems" :key="index" class="px-2 mx-10 font-bold bg-white rounded-md shadow-md text-sky-800">{{ item.itemAmount }} {{ item.itemName }} ${{ item.itemSubtotal }}</p>
             <p class="px-2 text-xl font-bold bg-white rounded-md shadow-md text-sky-800">Total: ${{ itemsTempCart.getGrandTotal }}</p>
             <div :class="{'bg-white': !sidebarClosed, 'bg-sky-800': sidebarClosed }" @click="toggleSidebar" class="absolute top-0 bottom-0 right-0 flex items-center justify-center cursor-pointer">
               <v-icon  name="md-arrowforwardios-round" scale="1.5" :color="sidebarClosed ? 'white' : '#075985'" :flip="!sidebarClosed ? 'horizontal' : 'vertical'" />
@@ -26,6 +26,7 @@
 
 <script lang="ts" setup>
 import ItemCard from '@/components/main/ItemCard.vue';
+import { ITempCart } from '@/interfaces/ITempCart';
 import MainLayout from '@/layouts/MainLayout.vue';
 import router from '@/router';
 import { useItemDailySales } from '@/store/ItemDailySales';
@@ -51,7 +52,8 @@ const toggleSidebar = () => sidebarClosed.value = !sidebarClosed.value;
 const pushToDailySales = () => {
   // verify if the cart is not empty
   if (tempCart.length > 0) {  
-    dailySalesStore.pushToDailySales(tempCart);
+    dailySalesStore.pushToDailySales({...tempCart, itemsTotal: itemsTempCart.getGrandTotal} as any);
+    dailySalesStore.pushDailySale(itemsTempCart.getGrandTotal);
     itemsTempCart.clearTempCart();
     router.push({ name: 'sales' });
   } else{

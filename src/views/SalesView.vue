@@ -2,6 +2,12 @@
     <div class="">
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-200 -z-20"></div>
         <h2>This is a sales view</h2>
+        <div class="flex w-full mb-3 ml-2"><RouterLink :to="{name: 'home'}"><p class="inline-block p-1 px-2 text-lg font-medium bg-white shadow-md text-sky-800 rounded-2xl font-poppins">Ir al inicio</p></RouterLink></div>
+        <div class="flex w-full mb-3 ml-2"><p class="inline-block p-1 px-2 text-lg font-medium bg-white shadow-md text-sky-800 rounded-2xl font-poppins">Ingresos Netos: ${{ dailySalesStore.getDailySalesTotals }}</p></div>
+        <div class="flex justify-end w-full mb-3 ml-2">
+            <button @click="saveAndReset" class="p-1 mr-10 text-sm text-white rounded-lg bg-sky-700 font-poppins">Guardar y Reestablecer Datos</button>
+        </div>
+        <!-- <p>{{ dailySalesStore.getDailySalesTotal }}</p> -->
         <section v-if="dailySalesStore.getDailySales" class="flex flex-col items-center justify-center w-full">
             <div v-for="(itemArr, index) in dailySalesStore.getDailySales" :key="index" class="flex flex-col items-start p-2 mx-2 mb-4 w-[95%] bg-white rounded-xl shadow-md font-poppins hover:border hover:border-sky-800 hover:scale-[1.03]">
                 <div class="flex items-center justify-end w-full gap-1 text-base text-sky-800">
@@ -11,19 +17,35 @@
             <div v-for="(item, index) in itemArr" :key="index" class="flex items-center gap-1 p-2 text-sky-700">
                 {{ item.itemAmount }}
                 {{ item.itemName }}
-                <p class="text-lg font-semibold underline text-sky-800">
+                <p v-if="item.itemSubtotal" class="text-lg font-semibold underline text-sky-800">
                     ${{ item.itemSubtotal }}
                 </p>
             </div>
+            <p class="text-lg font-semibold">Total: ${{ itemArr.itemsTotal }}</p>
         </div>
     </section>
     </div>
 </template>
 
 <script lang="ts" setup>
+import router from '@/router';
 import { useItemDailySales } from '@/store/ItemDailySales';
+import { useItemHistorySales } from '@/store/ItemHistorySales';
+import { onMounted, ref } from 'vue';
 
 const dailySalesStore = useItemDailySales();
+const historySalesStore = useItemHistorySales();
+
+const showTotal = ref(false);
+
+const saveAndReset = () => {
+   const saveTimeStamp = new Date().toLocaleString();
+    historySalesStore.pushSaleToHistory(dailySalesStore.getDailySales);
+    historySalesStore.pushTotalsToHistory(dailySalesStore.dailySalesTotals);
+    historySalesStore.pushDateToHistory(saveTimeStamp);
+    dailySalesStore.clearDailySales();
+    router.push({ name: 'salesHistory' });
+}
 </script>
 
 <style scoped>

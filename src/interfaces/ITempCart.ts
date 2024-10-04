@@ -3,5 +3,6 @@ export interface ITempCart {
     itemPrice: number,
     itemAmount: number,
     itemSubtotal:number,
-    itemDate?:string,
+    itemDate:string,
+    itemsTotal:number
 }
