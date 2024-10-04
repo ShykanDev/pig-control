@@ -1,14 +1,16 @@
 <template>
     <div class="">
-        <div class="flex flex-col items-center p-1 transition-transform duration-200 bg-white shadow-md min-w-36 min-h-36 max-w-20 rounded-2xl justify-evenly hover:border hover:border-sky-800 hover:scale-105">
-            <h2 class="font-sans font-semibold text-slate-800">{{ props.itemName }}</h2>
-            <h2 class="font-bold text-sky-900">${{ props.itemPrice }}</h2>
+        <div class="flex flex-col items-center p-1 transition-transform duration-200 bg-white shadow-md min-w-36 min-h-36 max-w-20 rounded-2xl justify-evenly hover:border hover:border-sky-800 hover:scale-105 font-poppins ">
+            <h2 class="font-semibold select-none text-slate-800">{{ props.itemName }}</h2>
+            <h2 class="text-xl font-bold select-none text-sky-900">${{ props.itemPrice }}</h2>
             <div class="flex items-center justify-center gap-3">
-                <p @click="editAmount('-')" class="text-lg font-semibold select-none text-sky-800">-</p>
-                <input @input="updateValues" v-model="itemAmount" class="w-[40%] text-center appearance-none " type="number" min="0">
-                <p @click="editAmount('+')" class="text-lg font-semibold select-none ">+</p>
+                <!-- <p @click="editAmount('-')" class="text-lg font-semibold select-none text-sky-800">-</p> -->
+                <v-icon @click="editAmount('-')" name="md-remove-round" scale="1.5" color="#075985" class="cursor-pointer" />
+                <input @input="updateValues" v-model="itemAmount" class="w-[40%] text-center appearance-none font-bold" type="number" min="0">
+                <!-- <p @click="editAmount('+')" class="text-lg font-semibold select-none ">+</p> -->
+                <v-icon @click="editAmount('+')" name="md-addcircle" scale="1.5" color="#075985" class="cursor-pointer"  />
             </div>
-            <p class="text-lg font-semibold text-sky-800">Total: ${{ totalToPay }}</p>
+            <p class="text-lg font-semibold select-none text-sky-800">Total: ${{ totalToPay }}</p>
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 export interface ITempCart {
-    itemName: string|undefined,
+    itemName: string,
     itemPrice: number,
     itemAmount: number,
     itemSubtotal:number,
-    itemDate?:string
+    itemDate?:string,
 }

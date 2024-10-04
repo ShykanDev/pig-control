@@ -4,11 +4,11 @@ import { defineStore } from "pinia";
 export const UseItemTempCart = defineStore('itemTempCart', ({
     state() {
         return{
-            tempCart: [] as ITempCart[],
+            tempCart: [] as Array<ITempCart>,
         }
     },
     getters: {
-        getTempCart():ITempCart[] {
+        getTempCart():Array<ITempCart>{
             return this.tempCart
         },
         getGrandTotal():number {
@@ -18,6 +18,9 @@ export const UseItemTempCart = defineStore('itemTempCart', ({
     actions: {
         pushToTempCart(newItem:ITempCart) {
             this.tempCart.push(newItem)
+        },
+        clearTempCart() {
+            this.tempCart = []
         }
     }
 }))
