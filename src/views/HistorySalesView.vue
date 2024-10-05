@@ -4,10 +4,23 @@
             <div class=" w-dvw">
                 <div class="fixed top-0 bottom-0 left-0 right-0 bg-sky-50 -z-20"></div>
                 <h1 class="text-2xl font-bold font-poppins text-sky-800">Historial de Ventas</h1>
+                <div class="flex items-center w-full mb-3 ml-2">
+                    <RouterLink :to="{name: 'home'}">
+                    <div class="flex items-center px-1 text-white shadow-md bg-sky-800 rounded-xl">
+                    <p class="inline-block p-1 px-2 text-lg font-medium font-poppins">Ir al inicio</p>
+                    <v-icon name="hi-solid-view-grid-add" scale="1.5" color="white" />
+                </div>
+            </RouterLink>
+        </div>
                 <div
                     class="fixed flex items-center gap-2 px-3 mb-3 ml-2 bg-white shadow-md min-w-16 max-w-52 text-sky-800 rounded-2xl ">
                     <p class="font-semibold font-poppins">Mostrar Ventas</p>
-                    <ToggleSlider @click="toggleSummary" />
+                    <ToggleSlider @click="toggleSummary('summary')" />
+                </div>
+                <div
+                    class="fixed flex items-center gap-2 px-3 mb-3 ml-2 bg-white shadow-md right-3 min-w-16 max-w-52 text-sky-800 rounded-2xl ">
+                    <p class="font-semibold font-poppins">Mostrar Gastos</p>
+                    <ToggleSliderOrange @click="toggleSummary('expenses')" />
                 </div>
                 <!-- Lenght limitator -->
                 <div class="flex justify-center my-3">
@@ -27,23 +40,26 @@
                     <div v-for="(itemArr, indexArr) in historySalesStore.getHistory.slice(start, end)" :key="indexArr"
                         class="px-2 py-1 mb-3 overflow-auto w-[95%] bg-white rounded-md font-poppins  max-h-96 resize-y ">
                         <div class="flex justify-end mr-3">
-                            <p class="inline-block px-3 text-lg font-semibold text-white bg-black rounded-lg font-poppins">Fecha: {{ historySalesStore.getHistoryDate[indexArr] }}</p>
+                            <p class="inline-block px-3 font-semibold text-white rounded-lg text-md bg-sky-900 font-poppins">Fecha: {{ historySalesStore.getHistoryDate[indexArr] }}</p>
                         </div>
                         <!-- Este es el codigo que necesito corregir para mostrar cada -->
                         <!-- <p>{{ historySalesStore.getHistoryExpenses[indexArr].map((item) => item[0].expenseReason) }}</p> -->
                         <p class="inline-block px-3 text-lg font-semibold text-white rounded-lg bg-sky-800 font-poppins">
                             Total Vendido: ${{ historySalesStore.getHistoryTotals[indexArr].reduce((a:number, b:number)=> a + b, 0) }}
                         </p>
-                        <div class="flex justify-end mr-6">
+                        <div v-if="showExpenses" class="flex justify-end mr-6">
                             <p class="inline-block px-3 mb-2 text-lg font-semibold text-white bg-orange-800 rounded-lg font-poppins">Gastos:</p>
                         </div>
-                        <div v-for="(itemdoes, indedex) in historySalesStore.getHistoryExpenses[indexArr]" :key="indedex">
-                            <div v-for="item in itemdoes" :key="item" class="flex justify-end gap-3">
-                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Motivo: '{{ item.expenseReason }}'</p>
-                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Monto: ${{ item.expenseAmount }}</p>
-                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Fecha: {{ item.expenseDate }}</p>
+                        <section v-if="showExpenses">
+                            <div v-for="(itemdoes, indedex) in historySalesStore.getHistoryExpenses[indexArr]" :key="indedex">
+                                <div v-for="item in itemdoes" :key="item" class="flex justify-end gap-3">
+                                    <p v-if="!item" class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">No hubo gastos</p>
+                                    <p class="inline-block px-3 mb-1 font-medium text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Motivo: {{ item.expenseReason }}</p>
+                                    <p class="inline-block px-3 mb-1 font-medium text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Monto: ${{ item.expenseAmount }}</p>
+                                    <p class="inline-block px-3 mb-1 font-medium text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Fecha: {{ item.expenseDate }}</p>
+                                </div>
                             </div>
-                        </div>
+                        </section>
                         <!--  -->
                          
                         <section v-if="showSummary">
@@ -132,6 +148,7 @@
 
 <script lang="ts" setup>
 import ToggleSlider from '@/components/salesHistory/ToggleSlider.vue';
+import ToggleSliderOrange from '@/components/salesHistory/ToggleSliderOrange.vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useItemHistorySales } from '@/store/ItemHistorySales';
 import { onMounted, ref } from 'vue';
@@ -139,11 +156,19 @@ import { onMounted, ref } from 'vue';
 const historySalesStore = useItemHistorySales();
 
 // ref to the checkbox element to show or hide the summary
-let showSummary = ref(true);
+let showSummary = ref(false);
+// ref to the checkbox element to show or hide the expenses
+let showExpenses = ref(false);
 
 // function to toggle the summary
-const toggleSummary = () => {
-    showSummary.value = !showSummary.value;
+const toggleSummary = (elementToToggle: string) => {
+    if (elementToToggle === 'summary'){
+        showSummary.value = !showSummary.value;
+    } else if (elementToToggle === 'expenses') {
+        showExpenses.value = !showExpenses.value;
+    } else {
+        console.log('Error');
+    }
 }
 
 // initial number to limit the number of sales to show

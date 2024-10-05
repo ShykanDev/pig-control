@@ -4,9 +4,23 @@
         <div class="">
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-20"></div>
         <h2 class="text-3xl font-medium font-poppins text-sky-800">Ventas</h2>
-        <div class="flex w-full mb-3 ml-2"><RouterLink :to="{name: 'home'}"><p class="inline-block p-1 px-2 text-lg font-medium bg-white shadow-md text-sky-800 rounded-2xl font-poppins">Ir al inicio</p></RouterLink>
+        <div class="flex items-center w-full mb-3 ml-2">
+                    <RouterLink :to="{name: 'home'}">
+                    <div class="flex items-center px-1 text-white shadow-md bg-sky-800 rounded-xl">
+                    <p class="inline-block p-1 px-2 text-lg font-medium font-poppins">Ir al inicio</p>
+                    <v-icon name="hi-solid-view-grid-add" scale="1.5" color="white" />
+                </div>
+            </RouterLink>
         </div>
-        <div class="flex w-full mb-3 ml-2"><p class="inline-block p-1 px-2 text-lg font-medium bg-white shadow-md text-sky-800 rounded-2xl font-poppins">Ingresos Netos: ${{ dailySalesStore.getDailyTotalEarned }}</p></div>
+        <div class="flex w-full mb-3 ml-2">
+            <div class="flex items-center bg-white shadow-md rounded-2xl">
+                <p class="p-1 text-lg font-medium bg-white text-sky-800 rounded-2xl font-poppins">Ingresos Netos:</p>
+                <p v-if="!showTotal" class="ml-1 text-lg font-bold text-sky-800 font-poppins">$****</p>
+                <p v-if="showTotal"  class="ml-1 text-lg font-bold text-sky-800 font-poppins">${{ dailySalesStore.getDailyTotalEarned }}</p>
+                <v-icon @click="toggleTotal" v-if="showTotal" class="mx-2 cursor-pointer"  name="bi-eye" scale="1.5" color="#075985"/>
+                <v-icon @click="toggleTotal" v-if="!showTotal"  class="mx-2 cursor-pointer" name="bi-eye-slash" scale="1.5" color="#075985"/>
+            </div>
+        </div>
         <!-- Add expenses -->
          <section class="flex flex-col gap-4 ml-2 max-w-56">
             <div>
@@ -18,7 +32,7 @@
             </div>
             <!-- vif for adding expenses -->
              <article v-if="showExpenses" class="flex flex-col items-center gap-2 p-1 px-2 text-lg font-medium bg-white shadow-md text-sky-800 rounded-2xl font-poppins">
-                <p>Gastos hoy: {{ dailySalesStore.getDailyExpenses.length }}</p>
+                <p>Gastos hoy: {{ dailySalesStore.getDailyExpenses.length  }}</p>
                 <p>Motivo</p>
                 <input type="text" v-model="expenseReason" placeholder="Pagué la renta" class=" text-center w-full border-b-[1px] border-sky-800 shadow-sm focus:outline-none mb-2">
                 <p>Monto</p>
@@ -58,7 +72,10 @@ import { onMounted, ref } from 'vue';
 const dailySalesStore = useItemDailySales();
 const historySalesStore = useItemHistorySales();
 
+// value to toogle the view of the total amount
 const showTotal = ref(false);
+// function to toogle the view of the total amount
+const toggleTotal = () => showTotal.value = !showTotal.value;
 
 // value to show the show expenses div
 let showExpenses = ref(false)
