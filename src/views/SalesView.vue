@@ -23,9 +23,7 @@
                 <input type="text" v-model="expenseReason" placeholder="Pagué la renta" class=" text-center w-full border-b-[1px] border-sky-800 shadow-sm focus:outline-none mb-2">
                 <p>Monto</p>
                 <input type="number" v-model="expenseAmount" placeholder="2650" class=" text-center w-full border-b-[1px] border-sky-800 shadow-sm focus:outline-none" min="0">
-      
                 <button @click="addExpense" class="p-1 text-xl bg-white border border-gray-300 rounded-lg shadow-md text-sky-800 hover:bg-gray-100 font-poppins">Añadir Gasto</button>
-
              </article>
          </section>
         <div class="flex justify-end w-full mb-3 ml-2">
@@ -86,11 +84,13 @@ const addExpense = () => {
 }
 const saveAndReset = () => {
     if(dailySalesStore.getDailySales.length > 0) {       
+    historySalesStore.pushToHistoryExpenses(dailySalesStore.getDailyExpenses);    
     const saveTimeStamp = new Date().toLocaleString();
     historySalesStore.pushSaleToHistory(dailySalesStore.getDailySales);
     historySalesStore.pushTotalsToHistory(dailySalesStore.dailySalesTotals);
     historySalesStore.pushDateToHistory(saveTimeStamp);
     dailySalesStore.clearDailySales();
+    dailySalesStore.clearDailyExpenses();
     router.push({ name: 'salesHistory' });
 } else {
     alert('You have to add at least one item to the cart');

@@ -5,7 +5,8 @@ export const useItemHistorySales = defineStore('itemHistorySales', ({
         return{
             totalHistory: [] as Array<any>,
             totalHistoryTotals: [] as Array<any>,
-            historyDate: [] as Array<any>
+            historyDate: [] as Array<any>,
+            historyExpenses: [] as Array<any>
         }
     },
     getters: {
@@ -17,6 +18,9 @@ export const useItemHistorySales = defineStore('itemHistorySales', ({
         },
         getHistoryDate():any{
             return this.historyDate;
+        },
+        getHistoryExpenses():any{
+            return this.historyExpenses;
         }
     },
     actions: {
@@ -32,6 +36,9 @@ export const useItemHistorySales = defineStore('itemHistorySales', ({
         },
         clearHistory(){
             this.totalHistory = [];
+        },
+        pushToHistoryExpenses(item: any){
+            this.historyExpenses.unshift(item);
         }
     }
 }))

@@ -42,6 +42,9 @@ export const useItemDailySales = defineStore('itemDailySales', ({
         },
         pushToDailyExpenses(newItem: object[]) {
             this.dailyExpenses.unshift(newItem);
+        },
+        clearDailyExpenses() {
+            this.dailyExpenses = [];
         }
     }
 }));
