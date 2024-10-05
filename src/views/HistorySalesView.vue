@@ -2,54 +2,59 @@
     <MainLayout>
         <template #main>
             <div class=" w-dvw">
-        <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-20"></div>
-        <h1 class="text-2xl font-bold font-poppins text-sky-800">Historial de Ventas</h1>
-        <div class="flex w-full gap-1 mb-3 ml-2">
-            <p>Mostrar Resumen</p>
-            <input type="checkbox" @click="toggleSummary" v-model="showSummary">
-        </div>
-        <!-- Lenght limitator -->
-        <div class="flex">
-            <div class="flex">
-                <p>Mostrando:</p>
-                <p class="text-center w-14"  type="number" min="1">{{ start  }}</p>
-                <p class="text-lg font-bold">/</p>
-                <p class="text-center w-14">{{ historyLength }}</p>
-            </div>
-        </div>
-        <div class="flex flex-col items-center">
-            <div v-for="(itemArr, indexArr) in historySalesStore.getHistory.slice(start, end)" :key="indexArr" class="px-2 py-1 mb-3 overflow-auto w-[95%] bg-white rounded-md font-poppins max-h-40">
-                <!-- {{ itemArr[0] }} -->
-                  <div class="flex justify-end mr-3">
-                      <p>Fecha: {{ historySalesStore.getHistoryDate[indexArr] }}</p>
-                  </div>
-                  <p>
-                     Total Vendido: ${{ historySalesStore.getHistoryTotals[indexArr].reduce((a:number, b:number) => a + b, 0) }}
-                  </p>
-                  <section v-if="showSummary">
-                      <div v-for="(item2, index) in itemArr" :key="index">
-                          <div v-for="(item, index) in item2" :key="index" class="flex gap-1">
-                              <p>{{ item.itemAmount }}</p>
-                              <p>{{ item.itemName }}</p>
-                              <p>${{ item.itemSubtotal }}</p>
-                            </div>
+                <div class="fixed top-0 bottom-0 left-0 right-0 bg-sky-50 -z-20"></div>
+                <h1 class="text-2xl font-bold font-poppins text-sky-800">Historial de Ventas</h1>
+                <div
+                    class="fixed flex items-center gap-2 px-3 mb-3 ml-2 bg-white shadow-md min-w-16 max-w-52 text-sky-800 rounded-2xl ">
+                    <p class="font-semibold font-poppins">Mostrar Resumen</p>
+                    <ToggleSlider @click="toggleSummary" />
+                </div>
+                <!-- Lenght limitator -->
+                <div class="flex justify-center my-3">
+                    <div
+                        class="flex items-center justify-center gap-2 p-2 transition-all duration-300 bg-white border border-gray-200 rounded-lg shadow-md">
+                        <p class="font-bold text-sky-900 font-poppins">Mostrando:</p>
+                        <p v-if="historyLength<15" class="w-16 text-lg font-semibold text-center text-gray-800">{{ historyLength }}</p>
+                        <!-- <p v-if="historyLength>=15" class="w-16 text-lg font-semibold text-center text-gray-800">{{ end }}</p> -->
+                        <input v-if="historyLength>=15" class="w-16 text-lg font-semibold text-center text-gray-800" type="number" v-model="end" name="" id="" min="1" :max="historyLength">
+                        <p class="text-lg font-bold text-gray-800">/</p>
+                        <p class="w-16 text-lg font-semibold text-center text-gray-800">{{ historyLength }}</p>
+                    </div>
+
+                </div>
+                <div class="flex flex-col items-center">
+                    <div v-for="(itemArr, indexArr) in historySalesStore.getHistory.slice(start, end)" :key="indexArr"
+                        class="px-2 py-1 mb-3 overflow-auto w-[95%] bg-white rounded-md font-poppins  max-h-96 resize-y ">
+                        <!-- {{ itemArr[0] }} -->
+                        <div class="flex justify-end mr-3">
+                            <p class="inline-block px-3 text-lg font-semibold text-white bg-black rounded-lg font-poppins">Fecha: {{ historySalesStore.getHistoryDate[indexArr] }}</p>
                         </div>
-                    </section>
-            <div>
-
-            </div>
-            </div>
-            </div>
-
+                            <p class="inline-block px-3 text-lg font-semibold text-white rounded-lg bg-sky-800 font-poppins">
+                            Total Vendido: ${{ historySalesStore.getHistoryTotals[indexArr].reduce((a:number, b:number)=> a + b, 0) }}
+                        </p>
+                        <section v-if="showSummary">
+                            <div v-for="(item2, index) in itemArr" :key="index">
+                                <div v-for="(item, index) in item2" :key="index" class="flex gap-1 mb-1">
+                                    <p class="inline-block px-3 text-white font-poppins bg-sky-800 rounded-2xl ">{{ item.itemAmount }}</p>
+                                    <p class="inline-block px-3 text-white font-poppins bg-sky-800 rounded-2xl ">{{ item.itemName }}</p>
+                                    <p class="inline-block px-3 font-bold text-emerald-800 font-poppins bg-emerald-200 rounded-2xl">${{ item.itemSubtotal }}</p>
+                                </div>
+                            </div>
+                        </section>
+                        <div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </template>
     </MainLayout>
 </template>
 
 <script lang="ts" setup>
+import ToggleSlider from '@/components/salesHistory/ToggleSlider.vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { useItemHistorySales } from '@/store/ItemHistorySales';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const historySalesStore = useItemHistorySales();
 
@@ -62,9 +67,20 @@ const toggleSummary = () => {
 }
 
 // initial number to limit the number of sales to show
-let start = ref(10);
+let start = ref(0);
 let historyLength = ref(historySalesStore.getHistory.length);
 let end = ref(15);
+
+// function to limit the number of sales to show
+const limitSales = () => {
+    if (historySalesStore.getHistory.length >= 15) {
+        end.value = 16;
+    }
+}
+
+onMounted(() => {
+    limitSales();
+})
 </script>
 
 <style scoped>

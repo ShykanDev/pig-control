@@ -16,7 +16,6 @@
 <script lang="ts" setup>
 import MainTopBar from '@/components/header/MainTopBar.vue';
 
-
 </script>
 
 <style scoped>
