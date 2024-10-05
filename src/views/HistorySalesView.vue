@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold font-poppins text-sky-800">Historial de Ventas</h1>
                 <div
                     class="fixed flex items-center gap-2 px-3 mb-3 ml-2 bg-white shadow-md min-w-16 max-w-52 text-sky-800 rounded-2xl ">
-                    <p class="font-semibold font-poppins">Mostrar Resumen</p>
+                    <p class="font-semibold font-poppins">Mostrar Ventas</p>
                     <ToggleSlider @click="toggleSummary" />
                 </div>
                 <!-- Lenght limitator -->
@@ -22,7 +22,6 @@
                     </div>
                 </div>
                 <div>
-                    <p v-for="item in historySalesStore.getHistoryExpenses" :key="item">{{ item }}</p>
                 </div>
                 <div class="flex flex-col items-center">
                     <div v-for="(itemArr, indexArr) in historySalesStore.getHistory.slice(start, end)" :key="indexArr"
@@ -32,15 +31,21 @@
                         </div>
                         <!-- Este es el codigo que necesito corregir para mostrar cada -->
                         <!-- <p>{{ historySalesStore.getHistoryExpenses[indexArr].map((item) => item[0].expenseReason) }}</p> -->
-                        <p>Gastos:</p>
-                        <div v-for="(itemdoes, indedex) in historySalesStore.getHistoryExpenses[indexArr]" :key="indedex">
-                            <p v-for="item in itemdoes" :key="item"> Motivo: '{{ item.expenseReason }}' Monto: ${{ item.expenseAmount }} Fecha: {{ item.expenseDate }}</p>
-                            
-                        </div>
-                        <!--  -->
-                            <p class="inline-block px-3 text-lg font-semibold text-white rounded-lg bg-sky-800 font-poppins">
+                        <p class="inline-block px-3 text-lg font-semibold text-white rounded-lg bg-sky-800 font-poppins">
                             Total Vendido: ${{ historySalesStore.getHistoryTotals[indexArr].reduce((a:number, b:number)=> a + b, 0) }}
                         </p>
+                        <div class="flex justify-end mr-6">
+                            <p class="inline-block px-3 mb-2 text-lg font-semibold text-white bg-orange-800 rounded-lg font-poppins">Gastos:</p>
+                        </div>
+                        <div v-for="(itemdoes, indedex) in historySalesStore.getHistoryExpenses[indexArr]" :key="indedex">
+                            <div v-for="item in itemdoes" :key="item" class="flex justify-end gap-3">
+                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Motivo: '{{ item.expenseReason }}'</p>
+                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Monto: ${{ item.expenseAmount }}</p>
+                                <p class="inline-block px-3 mb-1 font-semibold text-orange-700 rounded-lg shadow-sm bg-orange-50 text-md font-poppins">Fecha: {{ item.expenseDate }}</p>
+                            </div>
+                        </div>
+                        <!--  -->
+                         
                         <section v-if="showSummary">
                             <div v-for="(item2, index) in itemArr" :key="index">
                                 <div v-for="(item, index) in item2" :key="index" class="flex gap-1 mb-1">

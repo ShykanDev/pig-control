@@ -2,7 +2,7 @@
     <div class="z-50">
         <div class="flex justify-between px-5 py-2 bg-white shadow-md w-dvw rounded-bl-md rounded-br-md">
             <v-icon name="gi-pig" scale="1.9" color="#075985" />
-            <h2 class="text-3xl font-medium font-lilita text-sky-800">Carnitas Estilo Michoacán</h2>
+            <h2 class="text-2xl font-medium font-lilita text-sky-800">Carnitas Estilo Michoacán</h2>
             <div>
                 <div class="">
                     <label for="check">
