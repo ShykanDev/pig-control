@@ -29,7 +29,6 @@
 
 <script lang="ts" setup>
 import ItemCard from '@/components/main/ItemCard.vue';
-import { ITempCart } from '@/interfaces/ITempCart';
 import MainLayout from '@/layouts/MainLayout.vue';
 import router from '@/router';
 import { useItemDailySales } from '@/store/ItemDailySales';

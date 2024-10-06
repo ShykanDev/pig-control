@@ -12,9 +12,19 @@
                 </div>
             </RouterLink>
         </div>
+        <!-- Chart -->
+         <div class="flex items-center justify-end gap-1 mr-3">
+            <div @click="toggleGraph" class="flex items-center gap-2 px-3 bg-white rounded-md shadow-sm">
+                <p class="font-semibold font-poppins text-sky-800">Mostrar Gráfico</p>
+                <ToggleSliderBlueDefault />
+            </div>
+         </div>
+        <div v-if="showGraph" class="flex flex-col items-center mb-3 ml-2">
+                <PieChart class="w-[70%]  p-1 " :data="[dailySalesStore.getDailyTotalEarned, dailySalesStore.getOnlyExpensesReduced, dailySalesStore.getDailyTotalEarned - dailySalesStore.getOnlyExpensesReduced]"/>
+        </div>
         <div class="flex w-full mb-3 ml-2">
-            <div class="flex items-center bg-white shadow-md rounded-2xl">
-                <p class="p-1 text-lg font-medium bg-white text-sky-800 rounded-2xl font-poppins">Ingresos Netos:</p>
+            <div class="flex items-center ml-3 bg-white shadow-md rounded-xl">
+                <p class="p-1 text-lg font-semibold bg-white text-sky-800 rounded-xl font-poppins">Ingresos Netos:</p>
                 <p v-if="!showTotal" class="ml-1 text-lg font-bold text-sky-800 font-poppins">$****</p>
                 <p v-if="showTotal"  class="ml-1 text-lg font-bold text-sky-800 font-poppins">${{ dailySalesStore.getDailyTotalEarned }}</p>
                 <v-icon @click="toggleTotal" v-if="showTotal" class="mx-2 cursor-pointer"  name="bi-eye" scale="1.5" color="#075985"/>
@@ -24,8 +34,8 @@
         <!-- Add expenses -->
          <section class="flex flex-col gap-4 ml-2 max-w-56">
             <div>
-                <div @click="toggleExpenses" class="flex items-center gap-2 p-1 px-2 text-lg font-medium bg-white shadow-md cursor-pointer text-sky-800 rounded-2xl font-poppins">
-                    <p>Agregar Gastos</p>
+                <div @click="toggleExpenses" class="flex items-center gap-2 p-1 px-2 ml-3 text-lg font-medium bg-white shadow-md cursor-pointer text-sky-800 rounded-xl font-poppins">
+                    <p class="font-semibold font-poppins">Agregar Gastos</p>
                     <v-icon v-if="!showExpenses" name="md-libraryadd-round" scale="1.5" color="#075985"/>
                     <v-icon v-if="showExpenses" name="md-closefullscreen" scale="1.5" color="#075985"/>
                 </div>
@@ -45,7 +55,7 @@
         </div>
         <section v-if="dailySalesStore.getDailySales" class="flex flex-col items-center justify-center w-full">
             <div v-for="(itemArr, index) in dailySalesStore.getDailySales" :key="index" class="flex flex-col items-start p-2 mx-2 mb-4 w-[95%] bg-white rounded-xl shadow-md font-poppins hover:border hover:border-sky-800 hover:scale-[1.03]">
-                <p class="text-lg font-semibold">Fecha:{{ dailySalesStore.getDailySalesDate[index] }}</p>
+                <p class="px-2 text-lg font-semibold text-white rounded-md bg-sky-800">Fecha:{{ dailySalesStore.getDailySalesDate[index] }}</p>
                 <div v-for="(item, index) in itemArr" :key="index" class="flex items-center gap-1 p-2 text-sky-700">
                     {{ item.itemAmount }}
                     {{ item.itemName }}
@@ -63,11 +73,13 @@
 </template>
 
 <script lang="ts" setup>
+import PieChart from '@/components/charts/PieChart.vue';
+import ToggleSliderBlueDefault from '@/components/salesHistory/ToggleSliderBlueDefault.vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import router from '@/router';
 import { useItemDailySales } from '@/store/ItemDailySales';
 import { useItemHistorySales } from '@/store/ItemHistorySales';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const dailySalesStore = useItemDailySales();
 const historySalesStore = useItemHistorySales();
@@ -92,6 +104,7 @@ let expenseAmount = ref(0);
 const addExpense = () => {
     if(expenseReason.value !== '' && expenseAmount.value > 0) {
         dailySalesStore.pushToDailyExpenses([{expenseReason: expenseReason.value, expenseAmount: expenseAmount.value, expenseDate: new Date().toLocaleString()}]);
+        dailySalesStore.pushToDailyExpensesOnlyExpenses(expenseAmount.value);
         expenseReason.value = '';
         expenseAmount.value = 0;
         // showExpenses.value = false;
@@ -99,6 +112,11 @@ const addExpense = () => {
         alert('Please enter a valid reason and amount');
     }
 }
+// vmodel for show hide the graph
+let showGraph = ref(false);
+// function to toggle the view of the graph
+const toggleGraph = () => showGraph.value = !showGraph.value;
+
 const saveAndReset = () => {
     if(dailySalesStore.getDailySales.length > 0) {       
     historySalesStore.pushToHistoryExpenses(dailySalesStore.getDailyExpenses);    
@@ -108,6 +126,7 @@ const saveAndReset = () => {
     historySalesStore.pushDateToHistory(saveTimeStamp);
     dailySalesStore.clearDailySales();
     dailySalesStore.clearDailyExpenses();
+    dailySalesStore.clearDailyExpensesOnlyExpenses();
     router.push({ name: 'salesHistory' });
 } else {
     alert('You have to add at least one item to the cart');
