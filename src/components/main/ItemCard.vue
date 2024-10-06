@@ -5,10 +5,10 @@
             <h2 class="text-xl font-bold select-none text-sky-900">${{ props.itemPrice }}</h2>
             <div class="flex items-center justify-center gap-3">
                 <!-- <p @click="editAmount('-')" class="text-lg font-semibold select-none text-sky-800">-</p> -->
-                <v-icon @click="editAmount('-')" name="md-remove-round" scale="1.5" color="#075985" class="cursor-pointer" />
+                <v-icon @click="editAmount('-')"  name="md-remove-round" scale="1.5" color="#075985" class="cursor-pointer active:text-red-500" />
                 <input @input="updateValues" v-model="itemAmount" class="w-[40%] text-center appearance-none font-bold" type="number" min="0">
                 <!-- <p @click="editAmount('+')" class="text-lg font-semibold select-none ">+</p> -->
-                <v-icon @click="editAmount('+')" name="md-addcircle" scale="1.5" color="#075985" class="cursor-pointer"  />
+                <v-icon @click="editAmount('+')" name="md-addcircle" scale="1.5" color="#075985" class="cursor-pointer active:text-emerald-300 active:scale-110"  />
             </div>
             <p class="text-lg font-semibold select-none text-sky-800">Total: ${{ totalToPay }}</p>
         </div>

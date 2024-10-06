@@ -5,7 +5,7 @@
         <!-- <div  class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-10"></div> -->
         <!-- <div class="w-full animate-fade-right h-dvh"> -->
           <div @click="sidebarClosed = true" class="fixed top-0 bottom-0 left-0 right-0 transition-colors duration-500 ease-in-out" :class="{'bg-black bg-opacity-40': !sidebarClosed, 'bg-sky-50 -z-20': sidebarClosed }"></div>
-          <article :class="{'translate-x-0': !sidebarClosed, '-translate-x-[88%]': sidebarClosed }" class="transition-transform ease-out duration-500 fixed top-0 bottom-0 left-0 bg-slate-100 text-white w-[65%] py-16 flex flex-col items-center gap-3 z-40">
+          <article :class="{'translate-x-0': !sidebarClosed, '-translate-x-[88%] sm:-translate-x-[90%]': sidebarClosed }" class="transition-transform ease-out duration-500 fixed top-0 bottom-0 left-0 bg-slate-100 text-white w-[65%] py-16 flex flex-col items-center gap-3 z-40">
             <p class="px-2 text-2xl font-bold bg-white rounded-md shadow-md font-poppins text-sky-800">Orden</p>
             <div class="flex flex-col items-start gap-3 overflow-auto ">
               <p v-for="(item, index) in cartItems" :key="index" class="px-2 mx-10 font-bold bg-white rounded-md shadow-md text-sky-800">{{ item.itemAmount }} {{ item.itemName }} ${{ item.itemSubtotal }}</p>
@@ -15,7 +15,7 @@
                 <v-icon  name="md-arrowforwardios-round" scale="1.5" :color="sidebarClosed ? 'white' : '#075985'" :flip="!sidebarClosed ? 'horizontal' : 'vertical'" />
               </div>
             </article>
-            <div class="z-10 flex flex-wrap justify-center gap-5 mt-4">
+            <div class="z-10 flex flex-wrap justify-center gap-5 mt-4 sm:mx-[5%]">
               <ItemCard v-for="item in totalItems" :key="item.itemName" :item-name="item.itemName" :item-price="item.itemPrice" />
             </div>
          <!-- Add sale and Show GranTotal -->
