@@ -1,8 +1,8 @@
 <template>
     <MainLayout>
     <template #main>
-        <div class="">
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-20"></div>
+        <div class="animate-fade-left">
         <h2 class="text-3xl font-medium font-poppins text-sky-800">Ventas</h2>
         <div class="flex items-center w-full mb-3 ml-2">
                     <RouterLink :to="{name: 'home'}">
@@ -14,9 +14,9 @@
         </div>
         <!-- Chart -->
          <div class="flex items-center justify-end gap-1 mr-3">
-            <div @click="toggleGraph" class="flex items-center gap-2 px-3 bg-white rounded-md shadow-sm">
+            <div  class="flex items-center gap-2 px-3 bg-white rounded-md shadow-sm">
                 <p class="font-semibold font-poppins text-sky-800">Mostrar Gráfico</p>
-                <ToggleSliderBlueDefault />
+                <ToggleSliderBlueDefault @click="toggleGraph"/>
             </div>
          </div>
         <div v-if="showGraph" class="flex flex-col items-center mb-3 ml-2">
@@ -129,7 +129,7 @@ const saveAndReset = () => {
     dailySalesStore.clearDailyExpensesOnlyExpenses();
     router.push({ name: 'salesHistory' });
 } else {
-    alert('You have to add at least one item to the cart');
+    alert('Necesitas tener al menos una venta');
 }
 }
 </script>

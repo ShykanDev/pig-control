@@ -1,8 +1,8 @@
 <template>
     <MainLayout>
         <template #main>
-            <div class=" w-dvw">
-                <div class="fixed top-0 bottom-0 left-0 right-0 bg-sky-50 -z-20"></div>
+            <div class="fixed top-0 bottom-0 left-0 right-0 bg-sky-50 -z-20"></div>
+            <div class="w-dvw animate-fade-left">
                 <h1 class="text-2xl font-bold font-poppins text-sky-800">Historial de Ventas</h1>
                 <div class="flex items-center w-full mb-3 ml-2">
                     <RouterLink :to="{name: 'home'}">
