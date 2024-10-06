@@ -7,7 +7,7 @@
              </slot>
          </div>
         <!-- Main content -->
-         <div class="mt-2">
+         <div class="pb-16 mt-16">
              <slot name="main"></slot>
          </div>
     </div>

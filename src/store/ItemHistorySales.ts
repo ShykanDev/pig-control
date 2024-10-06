@@ -40,5 +40,6 @@ export const useItemHistorySales = defineStore('itemHistorySales', ({
         pushToHistoryExpenses(item: any){
             this.historyExpenses.unshift(item);
         }
-    }
+    },
+    persist: true
 }))

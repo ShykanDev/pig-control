@@ -2,9 +2,9 @@
     <MainLayout>
     <template #main>
         <div class="fixed top-0 bottom-0 left-0 right-0 bg-slate-100 -z-20"></div>
-        <div class="animate-fade-left">
+        <div class="animate-fade">
         <h2 class="text-3xl font-medium font-poppins text-sky-800">Ventas</h2>
-        <div class="flex items-center w-full mb-3 ml-2">
+        <div class="flex items-center w-full mt-2 mb-3 ml-2">
                     <RouterLink :to="{name: 'home'}">
                     <div class="flex items-center px-1 text-white shadow-md bg-sky-800 rounded-xl">
                     <p class="inline-block p-1 px-2 text-lg font-medium font-poppins">Ir al inicio</p>
@@ -13,7 +13,7 @@
             </RouterLink>
         </div>
         <!-- Chart -->
-         <div class="flex items-center justify-end gap-1 mr-3">
+         <div class="flex items-center justify-end gap-1 mb-2 mr-3">
             <div  class="flex items-center gap-2 px-3 bg-white rounded-md shadow-sm">
                 <p class="font-semibold font-poppins text-sky-800">Mostrar Gráfico</p>
                 <ToggleSliderBlueDefault @click="toggleGraph"/>
@@ -32,9 +32,9 @@
             </div>
         </div>
         <!-- Add expenses -->
-         <section class="flex flex-col gap-4 ml-2 max-w-56">
+         <section class="flex flex-col gap-4 mb-5 ml-2 max-w-56">
             <div>
-                <div @click="toggleExpenses" class="flex items-center gap-2 p-1 px-2 ml-3 text-lg font-medium bg-white shadow-md cursor-pointer text-sky-800 rounded-xl font-poppins">
+                <div @click="toggleExpenses" class="flex items-center gap-2 p-1 px-2 mb-4 ml-3 text-lg font-medium bg-white shadow-md cursor-pointer text-sky-800 rounded-xl font-poppins">
                     <p class="font-semibold font-poppins">Agregar Gastos</p>
                     <v-icon v-if="!showExpenses" name="md-libraryadd-round" scale="1.5" color="#075985"/>
                     <v-icon v-if="showExpenses" name="md-closefullscreen" scale="1.5" color="#075985"/>
@@ -55,7 +55,7 @@
         </div>
         <section v-if="dailySalesStore.getDailySales" class="flex flex-col items-center justify-center w-full">
             <div v-for="(itemArr, index) in dailySalesStore.getDailySales" :key="index" class="flex flex-col items-start p-2 mx-2 mb-4 w-[95%] bg-white rounded-xl shadow-md font-poppins hover:border hover:border-sky-800 hover:scale-[1.03]">
-                <p class="px-2 text-lg font-semibold text-white rounded-md bg-sky-800">Fecha:{{ dailySalesStore.getDailySalesDate[index] }}</p>
+                <p class="px-2 text-lg font-semibold text-white rounded-md bg-sky-800">Fecha: {{ dailySalesStore.getDailySalesDate[index] }}</p>
                 <div v-for="(item, index) in itemArr" :key="index" class="flex items-center gap-1 p-2 text-sky-700">
                     {{ item.itemAmount }}
                     {{ item.itemName }}
@@ -63,7 +63,7 @@
                         ${{ item.itemSubtotal }}
                     </p>
                 </div>
-                <p class="text-lg font-semibold">Total: {{ dailySalesStore.getDailySalesTotals[index] }}</p>
+                <p class="inline-block px-2 text-lg font-semibold bg-emerald-300 text-emerald-800 rounded-xl">Total: ${{ dailySalesStore.getDailySalesTotals[index] }}</p>
         </div>
     </section>
         </div>
@@ -126,6 +126,7 @@ const saveAndReset = () => {
     historySalesStore.pushDateToHistory(saveTimeStamp);
     dailySalesStore.clearDailySales();
     dailySalesStore.clearDailyExpenses();
+    dailySalesStore.clearDailySalesDate();
     dailySalesStore.clearDailyExpensesOnlyExpenses();
     router.push({ name: 'salesHistory' });
 } else {

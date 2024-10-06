@@ -1,6 +1,6 @@
 <template>
     <div class="z-50">
-        <div class="flex justify-between px-5 py-2 bg-white shadow-md w-dvw rounded-bl-md rounded-br-md">
+        <div class="fixed top-0 left-0 right-0 flex justify-between px-5 py-2 bg-white shadow-md w-dvw rounded-bl-md rounded-br-md">
             <v-icon name="gi-pig" scale="1.9" color="#075985" />
             <h2 class="text-2xl font-medium font-lilita text-sky-800">Carnitas Estilo Michoacán</h2>
             <div>
@@ -14,8 +14,8 @@
                 </div>
             </div>
         </div>
-        <div :class="{'translate-x-full': !isMenuOpen, 'translate-x-0': isMenuOpen }"
-            class="flex flex-col items-left px-4 fixed top-[5%] py-7 gap-3 bottom-0 left-[70%] right-0 bg-slate-100 -z-10 transition-transform duration-300 ease-in-out">
+        <div :class="{'-translate-x-0': !isMenuOpen, 'translate-x-[100%]': isMenuOpen }"
+            class="flex flex-col items-left px-4 fixed top-[5%] py-7 gap-3 bottom-0 left-[50%]  right-0 bg-slate-100 -z-10 transition-transform duration-300 ease-in-out">
             <RouterLink class="flex items-center" :to="{ name: 'home' }">
                 <v-icon name="ri-home-5-fill" scale="1.5" color="#075985" />
                 <p :class="{'bg-sky-800 text-white' : route.name === 'home', 'bg-white text-sky-800' : route.name !== 'home' }"
@@ -43,7 +43,7 @@
   const route = useRoute();
   
   // Inicialmente, el menú estará cerrado
-  let isMenuOpen = ref(false);
+  let isMenuOpen = ref(true);
   
   // Función para alternar el estado del sidebar
   const toggleSidebar = (e: Event) => {

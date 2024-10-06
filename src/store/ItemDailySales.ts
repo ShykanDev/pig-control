@@ -19,6 +19,7 @@ export const useItemDailySales = defineStore('itemDailySales', ({
        getDailySalesDate:(state):Array<string> => {
            return state.dailySalesDate;
        },
+
        getDailyTotalEarned: (state): number => {
            return state.dailySalesTotals.reduce((a, b) => a + b, 0);
        },
@@ -53,8 +54,12 @@ export const useItemDailySales = defineStore('itemDailySales', ({
         clearDailyExpensesOnlyExpenses() {
             this.dailyExpensesOnlyExpenses = [];
         },
+        clearDailySalesDate() {
+            this.dailySalesDate = [];
+        },
         clearDailyExpenses() {
             this.dailyExpenses = [];
         }
-    }
+    },
+    persist: true
 }));
